@@ -29,14 +29,14 @@ class BERTReader(DatasetReader):
 
     tokens : ``TextField``
         The WordPiece tokens in the sentence.
-    token_types : ``SequenceLabelField``
+    segment_ids : ``SequenceLabelField``
         The labels of each of the tokens (0 - tokens from the first sentence,
         1 - tokens from the second sentence).
     # masked_lm_positions : ``SequenceLabelField``
     #     For each token, whether it is masked or not.
-    masked_lm_labels : ``SequenceLabelField``
+    lm_label_ids : ``SequenceLabelField``
         For each masked position, what is the correct label.
-    is_next : ``LabelField``
+    next_sentence_label : ``LabelField``
         Next sentence label: is the second sentence the next sentence following the
         first one, or is it a randomly selected sentence.
     tags : ``SequenceLabelField``
@@ -127,22 +127,22 @@ class BERTReader(DatasetReader):
         # pylint: disable=arguments-differ
         fields: Dict[str, Field] = {}
 
-        fields['is_next'] = LabelField(label, skip_indexing=True)
+        fields['next_sentence_label'] = LabelField(label, skip_indexing=True)
 
         # @todo: do we want to support anything other than word pieces? if so, how?
         sentence1_field = self._token_indexers["tokens"].wordpiece_tokenizer(sentence1)
         sentence2_field = self._token_indexers["tokens"].wordpiece_tokenizer(sentence2)
 
 
-        tokens, token_types, masked_lm_labels = \
+        tokens, segment_ids, lm_label_ids = \
             self.create_token_field(sentence1_field, sentence2_field, target_sequence_length)
 
         tokens = [Token(t) for t in tokens]
 
         tokens_field = TextField(tokens, token_indexers=self._token_indexers)
         fields['tokens'] = tokens_field
-        fields['token_types'] = SequenceLabelField(token_types, tokens_field)
-        fields['masked_lm_labels'] = SequenceLabelField(masked_lm_labels, tokens_field)
+        fields['segment_ids'] = SequenceLabelField(segment_ids, tokens_field)
+        fields['lm_label_ids'] = SequenceLabelField(lm_label_ids, tokens_field)
 
         return Instance(fields)
 
@@ -163,11 +163,11 @@ class BERTReader(DatasetReader):
         tokens1, tokens2 = self.truncate_seq_pair(tokens1, tokens2, max_sequence_length)
 
         tokens = [start_token] + tokens1 + [sep_token] + tokens2 + [sep_token]
-        token_types = (len(tokens1)+ 2) * [0] + (len(tokens2)+ 1) * [1]
+        segment_ids = (len(tokens1)+ 2) * [0] + (len(tokens2)+ 1) * [1]
 
-        tokens, masked_lm_labels = self.create_masked_lm_predictions(tokens)
+        tokens, lm_label_ids = self.create_masked_lm_predictions(tokens)
 
-        return tokens, token_types, masked_lm_labels
+        return tokens, segment_ids, lm_label_ids
 
 
 
@@ -216,11 +216,11 @@ class BERTReader(DatasetReader):
 
       masked_lms = sorted(masked_lms, key=lambda x: x[0])
 
-      masked_lm_labels = len(tokens) * [-1]
+      lm_label_ids = len(tokens) * [-1]
       for p in masked_lms:
-        masked_lm_labels[p[0]] = p[1]
+        lm_label_ids[p[0]] = p[1]
 
-      return output_tokens, masked_lm_labels
+      return output_tokens, lm_label_ids
 
 
 
