@@ -263,6 +263,8 @@ class PretrainedBertIndexer(WordpieceIndexer):
                          end_tokens=["[SEP]"],
                          separator_token="[SEP]")
 
+        self.ids_to_tokens = bert_tokenizer.ids_to_tokens
+
 
 def _get_token_type_ids(wordpiece_ids: List[int],
                         separator_ids: List[int]) -> List[int]:
