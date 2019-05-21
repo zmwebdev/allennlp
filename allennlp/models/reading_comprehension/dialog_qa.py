@@ -96,6 +96,15 @@ class DialogQA(Model):
         self._span_yesno_predictor = TimeDistributed(torch.nn.Linear(self._encoding_dim, 3))
         self._span_followup_predictor = TimeDistributed(self._followup_lin)
 
+        print("phrase_layer.get_input_dim()")
+        print(phrase_layer.get_input_dim())
+        print("text_field_embedder.get_output_dim()")
+        print(text_field_embedder.get_output_dim())
+        print("marker_embedding_dim")
+        print(marker_embedding_dim)
+        print("num_context_answers")
+        print(num_context_answers)
+
         check_dimensions_match(phrase_layer.get_input_dim(),
                                text_field_embedder.get_output_dim() +
                                marker_embedding_dim * num_context_answers,
