@@ -4,12 +4,8 @@
         "lazy": true,
         "num_context_answers": 2,
         "token_indexers": {
-            "bert": {
-                "type": "bert-pretrained",
-                "pretrained_model": "bert-base-multilingual-cased",
-                "do_lowercase": false,
-                "use_starting_offsets": true,
-                "truncate_long_sequences": false                             
+            "elmo": {
+                "type": "elmo_characters"
             },
             "token_characters": {
                 "type": "characters",
@@ -76,15 +72,13 @@
             "num_layers": 1
         },
         "text_field_embedder": {
-            "bert": {
-                "type": "bert-pretrained",
-                "pretrained_model": "bert-base-multilingual-cased"
+            "elmo": {
+                "type": "elmo_token_embedder",
+                "do_layer_norm": false,
+                "dropout": 0.2,
+                "options_file": "https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json",
+                "weight_file": "https://s3-us-west-2.amazonaws.com/allennlp/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5"
             },
-            "allow_unmatched_keys": true,
-            "embedder_to_indexer_map": {
-                "bert": ["bert", "bert-offsets"],
-                "token_characters": ["token_characters"],
-            },            
             "token_characters": {
                 "type": "character_encoding",
                 "dropout": 0.2,
