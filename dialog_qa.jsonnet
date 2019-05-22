@@ -84,7 +84,7 @@
             "token_embedders": {
                 "bert": {
                     "type": "bert-pretrained",
-                    "pretrained_model": "bert-large-cased"
+                    "pretrained_model": "bert-base-multilingual-cased"
                 },
                 "token_characters": {
                     "type": "character_encoding",
