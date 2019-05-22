@@ -22,7 +22,7 @@
                         259
                     ]
                 },
-                "min_padding_length": 3
+                "min_padding_length": 5
             }
         }
     },
@@ -51,7 +51,7 @@
             "type": "gru",
             "bidirectional": true,
             "hidden_size": 100,
-            "input_size": 888,  // BERT (768) + cnn (100) + num_context_answers (2) * marker_embedding_dim (10)
+            "input_size": 888,  // elmo (1024) + cnn (100) + num_context_answers (2) * marker_embedding_dim (10)
             "num_layers": 1
         },
         "residual_encoder": {
@@ -76,33 +76,32 @@
             "num_layers": 1
         },
         "text_field_embedder": {
+            "bert": {
+                "type": "bert-pretrained",
+                "pretrained_model": "bert-base-multilingual-cased"
+            },
             "allow_unmatched_keys": true,
             "embedder_to_indexer_map": {
                 "bert": ["bert", "bert-offsets"],
-                "token_characters": ["token_characters"]
-            },
-            "token_embedders": {
-                "bert": {
-                    "type": "bert-pretrained",
-                    "pretrained_model": "bert-large-cased"
+                "token_characters": ["token_characters"],
+            },            
+            "token_characters": {
+                "type": "character_encoding",
+                "dropout": 0.2,
+                "embedding": {
+                    "embedding_dim": 20,
+                    "num_embeddings": 262
                 },
-                "token_characters": {
-                    "type": "character_encoding",
-                    "embedding": {
-                        "embedding_dim": 16,
-                        "num_embeddings": 262
-                    },
-                    "encoder": {
-                        "type": "cnn",
-                        "embedding_dim": 16,
-                        "num_filters": 128,
-                        "ngram_filter_sizes": [3],
-                        "conv_layer_activation": "relu"
-                    }
+                "encoder": {
+                    "type": "cnn",
+                    "embedding_dim": 20,
+                    "ngram_filter_sizes": [
+                        5
+                    ],
+                    "num_filters": 100
                 }
             }
         }
-
     },
     "train_data_path": "https://s3.amazonaws.com/my89public/quac/train_5000.json",
     "validation_data_path": "https://s3.amazonaws.com/my89public/quac/val.json",
@@ -114,7 +113,7 @@
             "mode": "max",
             "patience": 3
         },
-        "num_epochs": 30,
+        "num_epochs": 10,
         "optimizer": {
             "type": "sgd",
             "lr": 0.01,
