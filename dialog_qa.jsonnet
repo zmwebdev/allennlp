@@ -104,8 +104,8 @@
         }
 
     },
-    "train_data_path": "elkarrizketak.quac.train.json",
-    "validation_data_path": "elkarrizketak.quac.val.json",
+    "train_data_path": "https://s3.amazonaws.com/my89public/quac/train_5000.json",
+    "validation_data_path": "https://s3.amazonaws.com/my89public/quac/val.json",
     "trainer": {
         "cuda_device": 0,
         "learning_rate_scheduler": {
