@@ -84,7 +84,7 @@
             "token_embedders": {
                 "bert": {
                     "type": "bert-pretrained",
-                    "pretrained_model": "bert-base-multilingual-cased"
+                    "pretrained_model": "mBlax"
                 },
                 "token_characters": {
                     "type": "character_encoding",
