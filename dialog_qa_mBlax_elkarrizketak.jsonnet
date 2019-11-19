@@ -6,7 +6,7 @@
         "token_indexers": {
             "bert": {
                 "type": "bert-pretrained",
-                "pretrained_model": "mBlax",
+                "pretrained_model": "bert",
                 "do_lowercase": true,
                 "use_starting_offsets": true,
                 "truncate_long_sequences": false                             
@@ -84,7 +84,7 @@
             "token_embedders": {
                 "bert": {
                     "type": "bert-pretrained",
-                    "pretrained_model": "mBlax"
+                    "pretrained_model": "bert"
                 },
                 "token_characters": {
                     "type": "character_encoding",
