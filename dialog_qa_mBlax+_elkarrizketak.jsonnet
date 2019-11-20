@@ -114,7 +114,7 @@
             "mode": "max",
             "patience": 3
         },
-        "num_epochs": 30,
+        "num_epochs": 15,
         "optimizer": {
             "type": "sgd",
             "lr": 0.01,
